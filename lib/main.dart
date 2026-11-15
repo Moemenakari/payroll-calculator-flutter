@@ -55,6 +55,14 @@ class _PayrollHomePageState extends State<PayrollHomePage> {
     });
   }
 
+  @override
+  void dispose() {
+    salaryController.dispose();
+    taxController.dispose();
+    deductionController.dispose();
+    super.dispose();
+  }
+
   void clearAll() {
     salaryController.clear();
     taxController.clear();
@@ -64,8 +72,6 @@ class _PayrollHomePageState extends State<PayrollHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    updateCalculation(); // Real-time calculation
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Payroll Calculator"),
@@ -132,10 +138,8 @@ class _PayrollHomePageState extends State<PayrollHomePage> {
               title: const Text("Include Social Security (3.5%)"),
               value: includeSocialSecurity,
               onChanged: (value) {
-                setState(() {
-                  includeSocialSecurity = value;
-                  updateCalculation();
-                });
+                includeSocialSecurity = value;
+                updateCalculation();
               },
             ),
 
@@ -174,7 +178,7 @@ class _PayrollHomePageState extends State<PayrollHomePage> {
             if (result.socialSecurity > 0)
               _line("Social Security", result.socialSecurity),
 
-            Divider(height: 30),
+            const Divider(height: 30),
 
             Text(
               "Net Salary: \$${result.netSalary.toStringAsFixed(2)}",
